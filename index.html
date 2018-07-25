@@ -11,8 +11,8 @@ Hello World
   var data = d3.csv("/Downloads/data.csv");
   var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
   sel.enter().append("circle").merge(sel)
-  .attr("cx",function(d,i){return d.Win;})
-  .attr("cy",function(d,i){return d.Loss;})
+  .attr("cx",function(d,i){return 100;})
+  .attr("cy",function(d,i){return 100;})
   .attr("r",function(d){return 10;});
   </script>
 
