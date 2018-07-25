@@ -8,12 +8,40 @@ Hello World
   <svg id = "successattacksvg"> </svg>
   </div>
   <script>
-  var data = d3.csv("/Downloads/data.csv");
+  // var data = d3.csv("/Downloads/data.csv");
+  var data =
+[
+    {
+        "x": 30,
+        "y": 40,
+        "r": 3
+    },
+    {
+        "x": 150,
+        "y": 80,
+        "r": 2
+    },
+    {
+        "x": -180,
+        "y": -50,
+        "r": 5
+    },
+    {
+        "x": 100,
+        "y": -120,
+        "r": 10
+    },
+    {
+        "x": -10,
+        "y": 20,
+        "r": 18
+    }
+];
   var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
   sel.enter().append("circle").merge(sel)
-  .attr("cx",function(d){return d.gspg})
-  .attr("cy",function(d){return d.ppg})
-  .attr("r",function(d){return d.trophies+1});
+  .attr("cx",function(d){return 120+d.x})
+  .attr("cy",function(d){return 240+d.y})
+  .attr("r",function(d){return d.r});
   </script>
 
 </body>
