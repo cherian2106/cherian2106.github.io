@@ -1,0 +1,20 @@
+Hello World
+<!DOCTYPE html>
+<script src="http://d3js.org/d3.v4.min.js"></script>
+
+<style></style>
+<html><body>
+  <div id="successattack">
+  <svg id = "successattacksvg"> </svg>
+  </div>
+  <script>
+  var data = d3.csv("/Downloads/data.csv");
+  var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
+  sel.enter().append("circle").merge(sel)
+  .attr("cx",function(d){return d.gspg})
+  .attr("cy",function(d){return d.ppg})
+  .attr("r",function(d){return d.trophies+1});
+  </script>
+
+</body>
+</html>
