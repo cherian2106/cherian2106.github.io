@@ -5,14 +5,14 @@ Hello World
 <style></style>
 <html><body>
   <div id="successattack">
-  <svg id = "successattacksvg";width = 1300px;height = 700px> </svg>
+  <svg id = "successattacksvg";width = "1300";height = "700"> </svg>
   </div>
   <script>
   var data = d3.csv("/Downloads/data.csv");
   var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
   sel.enter().append("circle").merge(sel)
-  .attr("cx",function(d,i){return 120 + 10*i;})
-  .attr("cy",function(d,i){return 240 + 10*i;})
+  .attr("cx",function(d,i){return 120+d.pld})
+  .attr("cy",function(d,i){return 240+d.GF})
   .attr("r",function(d){return 5;});
   </script>
 
