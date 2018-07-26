@@ -9,9 +9,8 @@ Hello World
   </div>
   <script>
   d3.csv("/data/data.csv",function(data) {
-    for (var i = 0; i < data.length; i++) {
-        console.log(data[i].Club);
-    }});
+    console.log(data.Club);
+    });
   // var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
   // sel.enter().append("circle").merge(sel)
   // .attr("cx",function(d,i){return 100;})
