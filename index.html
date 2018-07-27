@@ -14,8 +14,8 @@ Hello World
   var da = d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(data){
     console.log(data[3]);
   });
-  var data = [1,2,3];
-  var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
+  // var data = [1,2,3];
+  var sel = d3.select("#successattacksvg").selectAll("circle").data(da[0]);
   sel.enter().append("circle").merge(sel)
   .attr("cx",5)
   .attr("cy",5)
