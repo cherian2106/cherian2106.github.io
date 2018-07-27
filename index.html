@@ -17,11 +17,10 @@ Hello World
   // var data = [1,2,3];
   var sel = d3.select("#successattacksvg").selectAll("circle").data(da);
   sel.enter().append("circle").merge(sel)
-  .attr("cx",function(d){return (width/5+d[0].Pld/10);})
-  .attr("cy",function(d){return (height/5+d[0].Pld/10);})
+  .attr("cx",function(d){return (width/5);})
+  .attr("cy",function(d){return (height/5);})
   .attr("r",function(d){return 5;});
   sel.exit().remove();
-  console.log(data);
   </script>
 </body>
 </html>
