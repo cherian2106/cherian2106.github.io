@@ -11,7 +11,13 @@ Hello World
   <script>
   var width = 1300;
   var height = 700;
-  var data = d3.csv("https://github.com/cherian2106/cherian2106.github.io/master/data/data.csv");
+  // var data = d3.csv("https://github.com/cherian2106/cherian2106.github.io/master/data/data.csv",function(error,data){
+  //   data.forEach(function(d) {
+  //  d.Pld = +d.Pld;
+  //  d.Pts = +d.Pts;
+  //  d.GF = +d.GF;
+  // })
+  var data = [1,2,3];
   var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
   sel.enter().append("circle").merge(sel)
   .attr("cx",function(d){return (width/2+150);})
