@@ -17,8 +17,8 @@ Hello World
   // var data = [1,2,3];
   var sel = d3.select("#successattacksvg").selectAll("circle").data(da[0]);
   sel.enter().append("circle").merge(sel)
-  .attr("cx",5)
-  .attr("cy",5)
+  .attr("cx",10)
+  .attr("cy",10)
   .attr("r",5);
   sel.exit().remove();
   </script>
