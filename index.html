@@ -11,11 +11,11 @@ Hello World
   <script>
   var width = 1300;
   var height = 700;
-  var data = d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(data){
+  var da = d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(data){
     console.log(data[3]);
   });
   // var data = [1,2,3];
-  var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
+  var sel = d3.select("#successattacksvg").selectAll("circle").data(da);
   sel.enter().append("circle").merge(sel)
   .attr("cx",function(d){return (width/5+d[0].Pld/10);})
   .attr("cy",function(d){return (height/5+d[0].Pld/10);})
