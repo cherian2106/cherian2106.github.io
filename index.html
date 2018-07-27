@@ -11,7 +11,7 @@ Hello World
   <script>
   var width = 1300;
   var height = 700;
-  var data = d3.csv("https://github.com/cherian2106/cherian2106.github.io/blob/master/data.csv",function(error,data){
+  var data = d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(error,data){
     data.forEach(function(d) {
    d.Pld = +d.Pld;
    d.Pts = +d.Pts;
