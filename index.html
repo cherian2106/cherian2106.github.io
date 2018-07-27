@@ -12,7 +12,7 @@ Hello World
   var width = 1300;
   var height = 700;
   var data = d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(data){
-    console.log(data[0].Pld);
+    console.log(data[0]);
   });
   // var data = [1,2,3];
   var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
