@@ -1,9 +1,20 @@
 <!DOCTYPE html>
+<!--tooltip code referenced from http://bl.ocks.org/flunky/3336e53db8923cd17e85c5887859d1a2-->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <html>
 <body>
+  <style>
+#tooltip {
+    opacity: 0;
+    position: absolute;
+    text-align: center;
+    width: 60px; height: 40px;
+    background: white;
+    border: 0px;
+}
+</style>
   <div id="successattack">
-  <svg id = "gsattacksvg" width = "1300" height = "1000"> </svg>
+  <svg id = "gsattacksvg" width = "1300" height = "900"> </svg>
   </div>
   <script>
   var width = 1300;
@@ -15,20 +26,29 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
      {
       d.Pld = +d.Pld;
       d.Pts = +d.Pts;
-      d.GF =  +d.GF;
-    })
-    var x = d3.scaleLinear().domain([0.6,2.3]).range([0,700]);
-    var y = d3.scaleLinear().domain([0.6,3]).range([700,0]);
+      d.GF =  +d.GF
+      d.First = +d.First;
+    });
+    var tooltip = d3.select("#tooltip");
+    var x = d3.scaleLinear().domain([0.6,2]).range([0,600]);
+    var y = d3.scaleLinear().domain([0.7,2.3]).range([600,0]);
   var sel = d3.select("#gsattacksvg").selectAll("circle").data(data);
-
   sel.enter().append("circle").merge(sel)
   .attr("cx",function(d){return x(d.GF/d.Pld);})
   .attr("cy",function(d){return y(d.Pts/d.Pld);})
-  .attr("r",);
+  .attr("r",function(d){return 2.5;});
+  // .on("mouseover", function(d,i) {
+  //       tooltip.style("opacity", 1)
+  //              .style("left",(d3.event.pageX)+"px")
+  //              .style("top",(d3.event.pageY)+"px")
+  //              .html("Item #"+i+" is "+d);
+  //   })
+  //   .on("mouseout", function() { tooltip.style("opacity", 0) });
   sel.exit().remove();
-
-//   d3.select("#gsattacksvg").append("g")
-// .attr("transform","translate("+margin+","+margin+")").call(d3.axisLeft(y));
+  d3.select("#gsattacksvg").append("g")
+.attr("transform","translate("+50+","+50+")").call(d3.axisLeft(y));
+d3.select("#gsattacksvg").append("g")
+.attr("transform","translate("+50+","+650+")").call(d3.axisBottom(x));
 });
   </script>
 </body>
