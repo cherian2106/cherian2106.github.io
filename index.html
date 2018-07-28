@@ -38,13 +38,14 @@ var dat = d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.gith
 
     })
     var x = d3.scaleLinear().domain([0,2.3]).range([0,1200]);
+    var y = d3.scaleLinear().domain([0,3]).range([700,0]);
   var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
 
   sel.enter().append("circle").merge(sel)
 
   .attr("cx",function(d){return x(d.GF/d.Pld);})
 
-  .attr("cy",function(d){return (height-d.Pts/d.Pld*450);})
+  .attr("cy",function(d){return y(d.Pts/d.Pld);})
 
   .attr("r",2);
 
