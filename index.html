@@ -14,7 +14,7 @@ var dat = d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.gith
     data.forEach(function (d) {
       d.Pld = +d.Pld;
       d.Pts = +d.Pts;
-      d.GF =  +d.GF
+      d.GF =  +d.GF;
     })
     var x = d3.scaleLinear().domain([0.6,2.3]).range([0,700]);
     var y = d3.scaleLinear().domain([0.6,3]).range([700,0]);
@@ -22,7 +22,7 @@ var dat = d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.gith
   sel.enter().append("circle").merge(sel)
   .attr("cx",function(d){return x(d.GF/d.Pld);})
   .attr("cy",function(d){return y(d.Pts/d.Pld);})
-  .attr("r",2);
+  .attr("r",);
   sel.exit().remove();
 });
   </script>
