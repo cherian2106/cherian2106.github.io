@@ -1,62 +1,30 @@
-Hello World
-
 <!DOCTYPE html>
-
 <script src="https://d3js.org/d3.v4.min.js"></script>
-
-
-
-<style></style>
-
 <html>
-
 <body>
-
   <div id="successattack">
-
   <svg id = "successattacksvg" width = "1300" height = "700"> </svg>
-
   </div>
-
   <script>
-
   var width = 1300;
-
   var height = 700;
-
 var dat = d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(error,data){
 
   if (error) throw error;
-
     data.forEach(function (d) {
-
       d.Pld = +d.Pld;
-
       d.Pts = +d.Pts;
-
       d.GF =  +d.GF
-
     })
-    var x = d3.scaleLinear().domain([0,2.3]).range([0,1200]);
+    var x = d3.scaleLinear().domain([0,2.3]).range([0,1300]);
     var y = d3.scaleLinear().domain([0,3]).range([700,0]);
   var sel = d3.select("#successattacksvg").selectAll("circle").data(data);
-
   sel.enter().append("circle").merge(sel)
-
   .attr("cx",function(d){return x(d.GF/d.Pld);})
-
   .attr("cy",function(d){return y(d.Pts/d.Pld);})
-
   .attr("r",2);
-
   sel.exit().remove();
-
 });
-
-  // var data = [1,2,3];
-
   </script>
-
 </body>
-
 </html>
