@@ -71,17 +71,19 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
     data.forEach(function (d)
      {
       d.Pld = +d.Pld;
-      d.Pts = +d.Pts;
-      d.GF =  +d.GF
+      d.GA =  +d.GA;
       d.First = +d.First;
+      d.Second = +d.Second;
+      d.Third = +d.Third;
+      d.Fourth = +d.Fourth;
     });
 // Create tooltip
     var tooltip = d3.select("body").append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
 // Scale X and Y values
-    var x = d3.scaleLinear().domain([0.5,2.1]).range([0,600]);
-    var y = d3.scaleLinear().domain([0.6,2.2]).range([600,0]);
+    var x = d3.scaleLinear().domain([0.55,1.2]).range([0,600]);
+    var y = d3.scaleLog().domain([1,100]).range([600,0]);
 // Select data and append to circles
   var sel = svg.selectAll("circle").data(data);
 
@@ -115,8 +117,8 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
 
 // Adding circles
   sel.enter().append("circle").merge(sel)
-  .attr("cx",function(d){return x(d.GF/d.Pld)+100;})
-  .attr("cy",function(d){return y(d.Pts/d.Pld)+50;})
+  .attr("cx",function(d){return x(1/(d.GA/d.Pld))+100;})
+  .attr("cy",function(d){return y(d.First*4+d.Second*3+d.Third*2+d.Fourth)+50;})
   .attr("r",function(d){return d.First+2;})
   .attr("stroke","black")
   .attr("stroke-width",1)
@@ -125,8 +127,8 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> Goals Per game: "
-        +(d.GF/d.Pld).toFixed(2)+ "<br/> Points Per game: " +(d.Pts/d.Pld).toFixed(2))
+          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> 1/Goals conceded per game: "
+        +(1/(d.GA/d.Pld)).toFixed(2)+ "<br/> Success: " +(d.First*4+d.Second*3+d.Third*2+d.Fourth).toFixed(2))
                .style("left", (d3.event.pageX + 15) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -172,7 +174,7 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
       .attr("font-size","30px")
       .attr("opacity",0.5)
       .style("text-anchor", "middle")
-      .text("Points per Game");
+      .text("Success");
   //Add X axis
 svg.append("g")
 .attr("transform","translate("+100+","+650+")").call(d3.axisBottom(x))
@@ -184,7 +186,7 @@ svg.append("text")
       .attr("x",420)
       .attr("y",725)
       .style("text-anchor", "middle")
-      .text("Goals Per Game");
+      .text("1/Goals conceded per game");
 
 
 

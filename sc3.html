@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!-- Tooltip referenced from http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html -->
+<!--  Axis referenced from https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e-->
+<!--  Grid lines referenced from https://bl.ocks.org/d3noob/c506ac45617cf9ed39337f99f8511218-->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<style>
+h1{
+  padding-top: 0.1%;
+  padding-bottom: 0.1%;
+  padding-left: 1%;
+  text-align: center;
+  opacity: 0.5;
+}
+body {
+font: 14px sans-serif;
+background-color: rgba(211,211,211,0.5);
+}
+.axis path,
+.axis line {
+fill: none;
+stroke: #000;
+shape-rendering: crispEdges;
+}
+.tooltip {
+  opacity: 0;
+  position: absolute;
+  text-align: center;
+  background: none;
+  border: 0px;
+  width: 200px;
+height: 50px;
+pointer-events: none;
+}
+.grid line {
+stroke: black;
+stroke-opacity: 0.1;
+shape-rendering: crispEdges;
+}
+
+.grid path {
+stroke-width: 0;
+}
+</style>
+<html>
+<h1>Goals per game vs Points per game</h1>
+<meta charset="utf-8">
+<body>
+
+  <div id="successattack">
+  <!-- <svg id = "gsattacksvg" x= "0" y="0" width = "900" height = "900"> </svg> -->
+  <!-- <svg id = "legend" x = "1300" y = "0" width = "300" height = "900"> </svg> -->
+  </div>
+  <script>
+var active_link="0";
+  var width = 900;
+  var height = 900;
+  var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 1300 - margin.left - margin.right,
+    height = 750 - margin.top - margin.bottom;
+    var cValue = function(d) { return d.Club;},
+        color = d3.scaleOrdinal(d3.schemeCategory10);
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(error,data){
+
+  if (error) throw error;
+    data.forEach(function (d)
+     {
+      d.Pld = +d.Pld;
+      d.GF =  +d.GF
+      d.First = +d.First;
+      d.Second = +d.Second;
+      d.Third = +d.Third;
+      d.Fourth = +d.Fourth;
+    });
+// Create tooltip
+    var tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+// Scale X and Y values
+    var x = d3.scaleLinear().domain([1.1,2.0]).range([0,600]);
+    var y = d3.scaleLog().domain([1,100]).range([600,0]);
+// Select data and append to circles
+  var sel = svg.selectAll("circle").data(data);
+
+  function make_x_gridlines() {
+      return d3.axisBottom(x)
+          .ticks(10)
+  }
+
+  // gridlines in y axis function
+  function make_y_gridlines() {
+      return d3.axisLeft(y)
+          .ticks(10)
+  }
+  svg.append("g")
+       .attr("class", "grid")
+       .attr("transform", "translate(100," + height + ")")
+       .call(make_x_gridlines()
+           .tickSize(-height,0,0)
+           .tickFormat("")
+       )
+
+   // add the Y gridlines
+   svg.append("g")
+       .attr("class", "grid")
+       .call(make_y_gridlines()
+           .tickSize(-750,0,0)
+           .tickFormat("")
+       )
+
+
+
+// Adding circles
+  sel.enter().append("circle").merge(sel)
+  .attr("cx",function(d){return x(d.GF/d.Pld)+100;})
+  .attr("cy",function(d){return y(d.First*4+d.Second*3+d.Third*2+d.Fourth)+50;})
+  .attr("r",function(d){return d.First+2;})
+  .attr("stroke","black")
+  .attr("stroke-width",1)
+  .attr("fill",function(d) { return color(cValue(d));})
+  .on("mouseover", function(d) {
+          tooltip.transition()
+               .duration(200)
+               .style("opacity", .9);
+          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> Goals Per game: "
+        +(d.GF/d.Pld).toFixed(2)+ "<br/> Success: " +(d.First*4+d.Second*3+d.Third*2+d.Fourth).toFixed(2))
+               .style("left", (d3.event.pageX + 15) + "px")
+               .style("top", (d3.event.pageY - 28) + "px");
+      })
+      .on("mouseout", function(d) {
+          tooltip.transition()
+               .duration(500)
+               .style("opacity", 0);
+      });
+// Add legend
+      var legend = svg.selectAll('.legend')
+            .data(data, function(d) { return d.Club; })
+            .enter().append('g')
+            .attr('class', 'legend')
+            .attr('ID', function(d) { return d.Club })
+            .attr("transform", function(d,i) {
+              return "translate(" + 1000 + "," + i*14 + ")";
+            });
+
+      legend.append("rect")
+            .attr('width', 12).attr('height', 12)
+            .style('fill', function(d) {
+              return color(d.Club);
+            });
+
+      legend.append("text")
+            .attr('x', 25).attr('y', 10)
+            .text(function(d) { return d.Club; })
+            .attr("font-family","sans-serif")
+            .attr("font-size","13px")
+            .attr("stroke","black");
+
+  svg.exit().remove();
+  // Add y axis
+  svg.append("g")
+.attr("transform","translate("+100+","+50+")").call(d3.axisLeft(y))
+.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left-50)
+      .attr("x",0 - (height / 2)+70)
+      .attr("dy", "1em")
+      .attr("fill","black")
+      .attr("font-family","sans-serif")
+      .attr("font-size","30px")
+      .attr("opacity",0.5)
+      .style("text-anchor", "middle")
+      .text("Success");
+  //Add X axis
+svg.append("g")
+.attr("transform","translate("+100+","+650+")").call(d3.axisBottom(x))
+svg.append("text")
+      .attr("fill","black")
+      .attr("font-family","sans-serif")
+      .attr("font-size","30px")
+      .attr("opacity",0.5)
+      .attr("x",420)
+      .attr("y",725)
+      .style("text-anchor", "middle")
+      .text("Goals Per Game");
+
+
+
+  legend.on("click",function(d){
+      //nothing selected, turn on this selection
+          d3.select(legend)
+            .attr("stroke", "black")
+            .attr("stroke-width", 2);
+            active_link="1";
+          });
+  legend.on("click",function(d){
+      if (active_link === "1") { //nothing selected, turn on this selection
+        d3.select(this)
+          .style("stroke", "none")
+          active_link="0";
+        }});
+});
+  </script>
+</body>
+</html>
