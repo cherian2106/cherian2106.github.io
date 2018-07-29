@@ -65,22 +65,22 @@ stroke-width: 0;
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(error,data){
+d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data2.csv",function(error,data){
 
   if (error) throw error;
     data.forEach(function (d)
      {
-      d.Pts = +d.Pts;
+      d["Avg Pts"] = +d["Avg Pts"];
     });
 // Create tooltip
     var tooltip = d3.select("body").append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
 // Scale X and Y values
-var x = d3.scaleBand().rangeRound([0, 600]).padding(0.1);
+var x = d3.scaleBand().rangeRound([0, 600]).padding(0.3);
 var y = d3.scaleLinear().rangeRound([600, 0]);
-  x.domain(data.map(function(d) { return d.Club; }));
-  y.domain([0, d3.max(data, function(d) { return d.Pts; })]);
+  x.domain(data.map(function(d) { return d["Club"]; }));
+  y.domain([0, 90]);
   var sel = svg.selectAll("rect").data(data);
 
   function make_x_gridlines() {
@@ -109,19 +109,19 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
            .tickFormat("")
        )
 
-
-
 // Adding circles
   sel.enter().append("rect").merge(sel)
-  .attr("width", function(d){return x(d.Club);})
-  .attr("height",function(d){return y(d.Pts);})
+  .attr("x", function(d) { return x(d["Club"])+100; })
+  .attr("y", function(d) { return  y(d["Avg Pts"])+50; })
+  .attr("height", function(d) { return height - y(d["Avg Pts"])-100; })
+  .attr("width", x.bandwidth())
   .attr("stroke-width",1)
   .attr("fill",function(d) { return color(cValue(d));})
   .on("mouseover", function(d) {
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["Club"] + "<br/> Pts: " + d.Pts)
+          tooltip.html(d["Club"] + "<br/> Pts: " + d["Avg Pts"])
                .style("left", (d3.event.pageX + 15) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -137,20 +137,20 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
             .attr('class', 'legend')
             .attr('ID', function(d) { return d.Club })
             .attr("transform", function(d,i) {
-              return "translate(" + 1000 + "," + i*14 + ")";
+              return "translate(" + 1000 + "," + i*30 + ")";
             });
 
       legend.append("rect")
-            .attr('width', 12).attr('height', 12)
+            .attr('width', 20).attr('height', 20)
             .style('fill', function(d) {
               return color(d.Club);
             });
 
       legend.append("text")
-            .attr('x', 25).attr('y', 10)
+            .attr('x', 25).attr('y', 15)
             .text(function(d) { return d.Club; })
             .attr("font-family","sans-serif")
-            .attr("font-size","13px")
+            .attr("font-size","20px")
             .attr("stroke","black");
 
   svg.exit().remove();

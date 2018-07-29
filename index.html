@@ -58,7 +58,7 @@ var active_link="0";
     width = 1300 - margin.left - margin.right,
     height = 750 - margin.top - margin.bottom;
     var cValue = function(d) { return d.Club;},
-        color = d3.scaleOrdinal(d3.schemeCategory10);
+        color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("body").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -117,7 +117,7 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
   sel.enter().append("circle").merge(sel)
   .attr("cx",function(d){return x(d.GF/d.Pld)+100;})
   .attr("cy",function(d){return y(d.Pts/d.Pld)+50;})
-  .attr("r",function(d){return d.First+2;})
+  .attr("r",function(d){return d.First+3;})
   .attr("stroke","black")
   .attr("stroke-width",1)
   .attr("fill",function(d) { return color(cValue(d));})
