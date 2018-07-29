@@ -72,7 +72,7 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
      {
       d.Pld = +d.Pld;
       d.Pts = +d.Pts;
-      d.GF =  +d.GF
+      d.GA =  +d.GA;
       d.First = +d.First;
     });
 // Create tooltip
@@ -80,7 +80,7 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
       .attr("class", "tooltip")
       .style("opacity", 0);
 // Scale X and Y values
-    var x = d3.scaleLinear().domain([0.5,2.2]).range([0,600]);
+    var x = d3.scaleLinear().domain([0.4,1.2]).range([0,600]);
     var y = d3.scaleLinear().domain([0.6,2.2]).range([600,0]);
 // Select data and append to circles
   var sel = svg.selectAll("circle").data(data);
@@ -115,7 +115,7 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
 
 // Adding circles
   sel.enter().append("circle").merge(sel)
-  .attr("cx",function(d){return x(d.GF/d.Pld)+100;})
+  .attr("cx",function(d){return x(1/(d.GA/d.Pld))+100;})
   .attr("cy",function(d){return y(d.Pts/d.Pld)+50;})
   .attr("r",function(d){return d.First+2;})
   .attr("stroke","black")
@@ -125,8 +125,8 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> Goals Per game: "
-        +(d.GF/d.Pld).toFixed(2)+ "<br/> Points Per game: " +(d.Pts/d.Pld).toFixed(2))
+          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> 1/Goals Against Per game: "
+        +(1/(d.GA/d.Pld)).toFixed(2)+ "<br/> Pts Per game: " +(d.Pts/d.Pld).toFixed(2))
                .style("left", (d3.event.pageX + 15) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
       })

@@ -1,4 +1,4 @@
-Pos,Club,Seasons,Pld,Win,Draw,Loss,GF,GA,GD,Pts,First,2nd,3rd,4th,Relegated,Avg Pts,Best Pos
+Pos,Club,Seasons,Pld,Win,Draw,Loss,GF,GA,GD,Pts,First,Second,Third,Fourth,Relegated,Avg Pts,Best Pos
 1,Manchester United,26,1000,629,215,156,1924,875,1049,2102,13,6,3,1,0,80.85,1
 2,Arsenal,26,1000,544,253,203,1772,962,810,1885,3,6,5,7,0,72.5,1
 3,Chelsea,26,1000,537,248,215,1707,963,744,1859,5,4,4,2,0,71.5,1

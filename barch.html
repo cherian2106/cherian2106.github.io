@@ -51,7 +51,7 @@ stroke-width: 0;
   <!-- <svg id = "legend" x = "1300" y = "0" width = "300" height = "900"> </svg> -->
   </div>
   <script>
-var active_link="0";
+
   var width = 900;
   var height = 900;
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -70,20 +70,18 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
   if (error) throw error;
     data.forEach(function (d)
      {
-      d.Pld = +d.Pld;
       d.Pts = +d.Pts;
-      d.GF =  +d.GF
-      d.First = +d.First;
     });
 // Create tooltip
     var tooltip = d3.select("body").append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
 // Scale X and Y values
-    var x = d3.scaleLinear().domain([0.5,2.2]).range([0,600]);
-    var y = d3.scaleLinear().domain([0.6,2.2]).range([600,0]);
-// Select data and append to circles
-  var sel = svg.selectAll("circle").data(data);
+var x = d3.scaleBand().rangeRound([0, 600]).padding(0.1);
+var y = d3.scaleLinear().rangeRound([600, 0]);
+  x.domain(data.map(function(d) { return d.Club; }));
+  y.domain([0, d3.max(data, function(d) { return d.Pts; })]);
+  var sel = svg.selectAll("rect").data(data);
 
   function make_x_gridlines() {
       return d3.axisBottom(x)
@@ -114,19 +112,16 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
 
 
 // Adding circles
-  sel.enter().append("circle").merge(sel)
-  .attr("cx",function(d){return x(d.GF/d.Pld)+100;})
-  .attr("cy",function(d){return y(d.Pts/d.Pld)+50;})
-  .attr("r",function(d){return d.First+2;})
-  .attr("stroke","black")
+  sel.enter().append("rect").merge(sel)
+  .attr("width", function(d){return x(d.Club);})
+  .attr("height",function(d){return y(d.Pts);})
   .attr("stroke-width",1)
   .attr("fill",function(d) { return color(cValue(d));})
   .on("mouseover", function(d) {
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> Goals Per game: "
-        +(d.GF/d.Pld).toFixed(2)+ "<br/> Points Per game: " +(d.Pts/d.Pld).toFixed(2))
+          tooltip.html(d["Club"] + "<br/> Pts: " + d.Pts)
                .style("left", (d3.event.pageX + 15) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -186,21 +181,17 @@ svg.append("text")
       .style("text-anchor", "middle")
       .text("Goals Per Game");
 
+var active_link=0;
 
-
-  legend.on("click",function(d){
-      //nothing selected, turn on this selection
-          d3.select(legend)
-            .attr("stroke", "black")
-            .attr("stroke-width", 2);
-            active_link="1";
-          });
-  legend.on("click",function(d){
-      if (active_link === "1") { //nothing selected, turn on this selection
-        d3.select(this)
-          .style("stroke", "none")
-          active_link="0";
-        }});
+  legend.on("click",function(){
+        if (active_link === "0") { //nothing selected, turn on this selection
+          d3.select(this)
+            .style("stroke", "black")
+            .style("stroke-width", 2);
+            active_link=1;
+          }
+        }
+      )
 });
   </script>
 </body>
