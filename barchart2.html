@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<!-- Tooltip referenced from http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html -->
+<!--  Axis referenced from https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e-->
+<!--  Grid lines referenced from https://bl.ocks.org/d3noob/c506ac45617cf9ed39337f99f8511218-->
+<!--  Svg display change referred from http://bl.ocks.org/d3noob/5d621a60e2d1d02086bf-->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<style>
+button{
+  background-color:black;
+  color: white;
+}
+h1{
+  padding-top: 0.1%;
+  padding-bottom: 0.1%;
+  padding-left: 1%;
+  text-align: center;
+  opacity: 0.5;
+}
+body {
+font: 14px sans-serif;
+background-color: rgba(211,211,211,0.5);
+}
+.axis path,
+.axis line {
+fill: none;
+stroke: #000;
+shape-rendering: crispEdges;
+}
+.tooltip {
+  opacity: 0;
+  position: absolute;
+  text-align: center;
+  background: none;
+  border: 0px;
+  width: 200px;
+height: 50px;
+pointer-events: none;
+}
+.grid line {
+stroke: black;
+stroke-opacity: 0.1;
+shape-rendering: crispEdges;
+}
+
+.grid path {
+stroke-width: 0;
+}
+</style>
+<html>
+<button onclick="click()" >1</button>
+<h1>Goals per game vs Points per game</h1>
+<meta charset="utf-8">
+<body>
+  <div id="successattack">
+  <svg id = "svg1" x= "0" y="0" width = "1300" height = "750"> </svg>
+  <svg id = "svg2" x = "0" y = "0" width = "1300" height = "750" display = "none"> </svg>
+  </div>
+  <script>
+
+  var width = 900;
+  var height = 900;
+  var margin = {top: 20, right: 20, bottom: 30, left: 40},
+  width = 1300 - margin.left - margin.right,
+  height = 750 - margin.top - margin.bottom;
+  var cValue = function(d) { return d.Club;},
+      color = d3.scaleOrdinal(d3.schemeCategory10);
+var active = 0;
+function click(){
+  sel2.attr("display","block")
+}
+
+d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data2.csv",function(error,data){
+
+  if (error) throw error;
+    data.forEach(function (d)
+     {
+      d["GF1"] = +d["GF1"];
+      d["GF2"] = +d["GF2"];
+    });
+// Create tooltip
+    var tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+// Scale X and Y values
+var x = d3.scaleBand().rangeRound([0, 600]).padding(0.3);
+var y = d3.scaleLinear().rangeRound([600, 0]);
+  x.domain(data.map(function(d) { return d["Club"]; }));
+  y.domain([0, 110]);
+
+  var sel = d3.select("#svg1").selectAll("rect").data(data);
+
+  function make_x_gridlines() {
+      return d3.axisBottom(x)
+          .ticks(10)
+  }
+
+  // gridlines in y axis function
+  function make_y_gridlines() {
+      return d3.axisLeft(y)
+          .ticks(10)
+  }
+  d3.select("#svg1").append("g")
+       .attr("class", "grid")
+       .attr("transform", "translate(100," + height + ")")
+       .call(make_x_gridlines()
+           .tickSize(-height,0,0)
+           .tickFormat("")
+       )
+
+   // add the Y gridlines
+   d3.select("#svg1").append("g")
+       .attr("class", "grid")
+       .call(make_y_gridlines()
+           .tickSize(-750,0,0)
+           .tickFormat("")
+       )
+   d3.select("#svg2").append("g")
+        .attr("class", "grid")
+        .attr("transform", "translate(100," + height + ")")
+        .call(make_x_gridlines()
+            .tickSize(-height,0,0)
+            .tickFormat("")
+        )
+
+    // add the Y gridlines
+    d3.select("#svg2").append("g")
+        .attr("class", "grid")
+        .call(make_y_gridlines()
+            .tickSize(-750,0,0)
+            .tickFormat("")
+        )
+
+// Adding rect
+  sel.enter().append("rect").merge(sel)
+  .attr("x", function(d) { return x(d["Club"])+100; })
+  .attr("y", function(d) { return  y(d["GF1"])+50; })
+  .attr("height", function(d) { return height - y(d["GF1"])-100; })
+  .attr("width", x.bandwidth())
+  .attr("stroke-width",1)
+  .attr("fill",function(d) { return color(cValue(d));})
+  .on("mouseover", function(d) {
+          tooltip.transition()
+               .duration(200)
+               .style("opacity", .9);
+          tooltip.html(d["Club"] + "<br/> Pts: " + d["GF1"])
+               .style("left", (d3.event.pageX + 15) + "px")
+               .style("top", (d3.event.pageY - 28) + "px");
+      })
+      .on("mouseout", function(d) {
+          tooltip.transition()
+               .duration(500)
+               .style("opacity", 0);
+      });
+// Add legend
+      var legend = d3.select("#svg1").selectAll('.legend')
+            .data(data, function(d) { return d.Club; })
+            .enter().append('g')
+            .attr('class', 'legend')
+            .attr('ID', function(d) { return d.Club })
+            .attr("transform", function(d,i) {
+              return "translate(" + 1000 + "," + i*30 + ")";
+            });
+
+      legend.append("rect")
+            .attr('width', 20).attr('height', 20)
+            .style('fill', function(d) {
+              return color(d.Club);
+            });
+
+      legend.append("text")
+            .attr('x', 25).attr('y', 15)
+            .text(function(d) { return d.Club; })
+            .attr("font-family","sans-serif")
+            .attr("font-size","20px")
+            .attr("stroke","black");
+
+  sel.exit().remove();
+  // Add y axis
+  d3.select("#svg1").append("g")
+.attr("transform","translate("+100+","+50+")").call(d3.axisLeft(y))
+.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left-50)
+      .attr("x",0 - (height / 2)+70)
+      .attr("dy", "1em")
+      .attr("fill","black")
+      .attr("font-family","sans-serif")
+      .attr("font-size","30px")
+      .attr("opacity",0.5)
+      .style("text-anchor", "middle")
+      .text("Points per Game");
+  //Add X axis
+d3.select("#svg1").append("g")
+.attr("transform","translate("+100+","+650+")").call(d3.axisBottom(x))
+d3.select("#svg1").append("text")
+      .attr("fill","black")
+      .attr("font-family","sans-serif")
+      .attr("font-size","30px")
+      .attr("opacity",0.5)
+      .attr("x",420)
+      .attr("y",725)
+      .style("text-anchor", "middle")
+      .text("Goals Per Game");
+//////////////////////////////////
+//////////////////////////////////
+//////////////////////////////////
+//////////////////////////////////
+//////////////////////////////////
+var sel2 = d3.select("#svg2").selectAll("rect").data(data);
+d3.select("#svg2").append("g")
+     .attr("class", "grid")
+     .attr("transform", "translate(100," + height + ")")
+     .call(make_x_gridlines()
+         .tickSize(-height,0,0)
+         .tickFormat("")
+     )
+
+ // add the Y gridlines
+ d3.select("#svg2").append("g")
+     .attr("class", "grid")
+     .call(make_y_gridlines()
+         .tickSize(-750,0,0)
+         .tickFormat("")
+     )
+
+// Adding rect
+sel2.enter().append("rect").merge(sel)
+.attr("x", function(d) { return x(d["Club"])+100; })
+.attr("y", function(d) { return  y(d["GF2"])+50; })
+.attr("height", function(d) { return height - y(d["GF2"])-100; })
+.attr("width", x.bandwidth())
+.attr("stroke-width",1)
+.attr("fill",function(d) { return color(cValue(d));})
+.on("mouseover", function(d) {
+        tooltip.transition()
+             .duration(200)
+             .style("opacity", .9);
+        tooltip.html(d["Club"] + "<br/> Pts: " + d["GF2"])
+             .style("left", (d3.event.pageX + 15) + "px")
+             .style("top", (d3.event.pageY - 28) + "px");
+    })
+    .on("mouseout", function(d) {
+        tooltip.transition()
+             .duration(500)
+             .style("opacity", 0);
+    });
+// Add legend
+sel2.exit().remove();
+// Add y axis
+d3.select("#svg2").append("g")
+.attr("transform","translate("+100+","+50+")").call(d3.axisLeft(y))
+.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left-50)
+    .attr("x",0 - (height / 2)+70)
+    .attr("dy", "1em")
+    .attr("fill","black")
+    .attr("font-family","sans-serif")
+    .attr("font-size","30px")
+    .attr("opacity",0.5)
+    .style("text-anchor", "middle")
+    .text("Points per Game");
+//Add X axis
+d3.select("#svg2").append("g")
+.attr("transform","translate("+100+","+650+")").call(d3.axisBottom(x))
+d3.select("#svg2").append("text")
+    .attr("fill","black")
+    .attr("font-family","sans-serif")
+    .attr("font-size","30px")
+    .attr("opacity",0.5)
+    .attr("x",420)
+    .attr("y",725)
+    .style("text-anchor", "middle")
+    .text("Goals Per Game");
+var legend = d3.select("#svg2").selectAll('.legend')
+          .data(data, function(d) { return d.Club; })
+          .enter().append('g')
+          .attr('class', 'legend')
+          .attr('ID', function(d) { return d.Club })
+          .attr("transform", function(d,i) {
+            return "translate(" + 1000 + "," + i*30 + ")";
+          });
+
+    legend.append("rect")
+          .attr('width', 20).attr('height', 20)
+          .style('fill', function(d) {
+            return color(d.Club);
+          });
+
+    legend.append("text")
+          .attr('x', 25).attr('y', 15)
+          .text(function(d) { return d.Club; })
+          .attr("font-family","sans-serif")
+          .attr("font-size","20px")
+          .attr("stroke","black");
+
+
+
+    d3.select("#svg2").append("text")
+    	.attr("x", 0)
+    	.attr("y", height + margin.top + 10)
+    	.attr("class", "legend")
+    	.style("fill", "steelblue")
+    	.on("click", function(){
+    		// Determine if current line is visible
+    		var active   = svg2.active ? false : true,
+    		  newOpacity = active ? "none" : "block";
+          nop2 = active ? "block" : "none";
+    		// Hide or show the elements
+    		d3.select("#svg2").style("display", newOpacity);
+        d3.select("#svg1").style("display", nop2);
+
+            		// Update whether or not the elements are active
+    		svg2.active = active;
+    	})
+    	.text("Double click for 2017");
+
+    // Add the red line title
+    d3.select("#svg1").append("text")
+    	.attr("x", 0)
+    	.attr("y", height + margin.top + 30)
+    	.attr("class", "legend")
+    	.style("fill", "red")
+    	.on("click", function(){
+    		// Determine if current line is visible
+    		var active   = svg1.active ? false : true ,
+    		  newOpacity = active ? "none" : "block";
+          nop2 = active ? "block" : "none";
+    		// Hide or show the elements
+    		d3.select("#svg1").style("display", newOpacity);
+        d3.select("#svg2").style("display", nop2);
+
+    		// Update whether or not the elements are active
+    		svg1.active = active;
+    	})
+    	.text("Double click for 2016");
+
+
+});
+  </script>
+</body>
+</html>
