@@ -36,7 +36,6 @@ stroke: black;
 stroke-opacity: 0.1;
 shape-rendering: crispEdges;
 }
-
 .grid path {
 stroke-width: 0;
 }
@@ -61,12 +60,8 @@ var active_link="0";
         color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("body").append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+        .attr("height", height + margin.top + margin.bottom);
 d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(error,data){
-
   if (error) throw error;
     data.forEach(function (d)
      {
@@ -84,12 +79,10 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
     var y = d3.scaleLinear().domain([0.6,2.2]).range([600,0]);
 // Select data and append to circles
   var sel = svg.selectAll("circle").data(data);
-
   function make_x_gridlines() {
       return d3.axisBottom(x)
           .ticks(10)
   }
-
   // gridlines in y axis function
   function make_y_gridlines() {
       return d3.axisLeft(y)
@@ -102,7 +95,6 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
            .tickSize(-height,0,0)
            .tickFormat("")
        )
-
    // add the Y gridlines
    svg.append("g")
        .attr("class", "grid")
@@ -110,9 +102,6 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
            .tickSize(-750,0,0)
            .tickFormat("")
        )
-
-
-
 // Adding circles
   sel.enter().append("circle").merge(sel)
   .attr("cx",function(d){return x(d.GF/d.Pld)+100;})
@@ -144,20 +133,17 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
             .attr("transform", function(d,i) {
               return "translate(" + 1000 + "," + i*14 + ")";
             });
-
       legend.append("rect")
             .attr('width', 12).attr('height', 12)
             .style('fill', function(d) {
               return color(d.Club);
             });
-
       legend.append("text")
             .attr('x', 25).attr('y', 10)
             .text(function(d) { return d.Club; })
             .attr("font-family","sans-serif")
             .attr("font-size","13px")
             .attr("stroke","black");
-
   svg.exit().remove();
   // Add y axis
   svg.append("g")
@@ -185,9 +171,6 @@ svg.append("text")
       .attr("y",725)
       .style("text-anchor", "middle")
       .text("Goals Per Game");
-
-
-
   legend.on("click",function(d){
       //nothing selected, turn on this selection
           d3.select(legend)

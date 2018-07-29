@@ -2,8 +2,13 @@
 <!-- Tooltip referenced from http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html -->
 <!--  Axis referenced from https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e-->
 <!--  Grid lines referenced from https://bl.ocks.org/d3noob/c506ac45617cf9ed39337f99f8511218-->
+<!--  Svg display change referred from http://bl.ocks.org/d3noob/5d621a60e2d1d02086bf-->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <style>
+button{
+  background-color:black;
+  color: white;
+}
 h1{
   padding-top: 0.1%;
   padding-bottom: 0.1%;
@@ -42,13 +47,13 @@ stroke-width: 0;
 }
 </style>
 <html>
+<button onclick="click()" >1</button>
 <h1>Goals per game vs Points per game</h1>
 <meta charset="utf-8">
 <body>
-
   <div id="successattack">
-  <!-- <svg id = "gsattacksvg" x= "0" y="0" width = "900" height = "900"> </svg> -->
-  <!-- <svg id = "legend" x = "1300" y = "0" width = "300" height = "900"> </svg> -->
+  <svg id = "svg1" x= "0" y="0" width = "1300" height = "750"> </svg>
+  <svg id = "svg2" x = "0" y = "0" width = "1300" height = "750" display = "none"> </svg>
   </div>
   <script>
 
@@ -59,19 +64,10 @@ stroke-width: 0;
   height = 750 - margin.top - margin.bottom;
   var cValue = function(d) { return d.Club;},
       color = d3.scaleOrdinal(d3.schemeCategory10);
-  var svg = d3.select("body").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  var svg2 = d3.select("body").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-      .attr("opacity","0");
-
+var active = 0;
+function click(){
+  sel2.attr("display","block")
+}
 
 d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data2.csv",function(error,data){
 
@@ -79,6 +75,7 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
     data.forEach(function (d)
      {
       d["Avg Pts"] = +d["Avg Pts"];
+      d["Curr"] = +d["Curr"];
     });
 // Create tooltip
     var tooltip = d3.select("body").append("div")
@@ -88,8 +85,9 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
 var x = d3.scaleBand().rangeRound([0, 600]).padding(0.3);
 var y = d3.scaleLinear().rangeRound([600, 0]);
   x.domain(data.map(function(d) { return d["Club"]; }));
-  y.domain([0, 90]);
-  var sel = svg.selectAll("rect").data(data);
+  y.domain([0, 100]);
+
+  var sel = d3.select("#svg1").selectAll("rect").data(data);
 
   function make_x_gridlines() {
       return d3.axisBottom(x)
@@ -101,7 +99,7 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
       return d3.axisLeft(y)
           .ticks(10)
   }
-  svg.append("g")
+  d3.select("#svg1").append("g")
        .attr("class", "grid")
        .attr("transform", "translate(100," + height + ")")
        .call(make_x_gridlines()
@@ -110,14 +108,29 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
        )
 
    // add the Y gridlines
-   svg.append("g")
+   d3.select("#svg1").append("g")
        .attr("class", "grid")
        .call(make_y_gridlines()
            .tickSize(-750,0,0)
            .tickFormat("")
        )
+   d3.select("#svg2").append("g")
+        .attr("class", "grid")
+        .attr("transform", "translate(100," + height + ")")
+        .call(make_x_gridlines()
+            .tickSize(-height,0,0)
+            .tickFormat("")
+        )
 
-// Adding circles
+    // add the Y gridlines
+    d3.select("#svg2").append("g")
+        .attr("class", "grid")
+        .call(make_y_gridlines()
+            .tickSize(-750,0,0)
+            .tickFormat("")
+        )
+
+// Adding rect
   sel.enter().append("rect").merge(sel)
   .attr("x", function(d) { return x(d["Club"])+100; })
   .attr("y", function(d) { return  y(d["Avg Pts"])+50; })
@@ -139,7 +152,7 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
                .style("opacity", 0);
       });
 // Add legend
-      var legend = svg.selectAll('.legend')
+      var legend = d3.select("#svg1").selectAll('.legend')
             .data(data, function(d) { return d.Club; })
             .enter().append('g')
             .attr('class', 'legend')
@@ -161,9 +174,9 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
             .attr("font-size","20px")
             .attr("stroke","black");
 
-  svg.exit().remove();
+  sel.exit().remove();
   // Add y axis
-  svg.append("g")
+  d3.select("#svg1").append("g")
 .attr("transform","translate("+100+","+50+")").call(d3.axisLeft(y))
 .append("text")
       .attr("transform", "rotate(-90)")
@@ -177,9 +190,9 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
       .style("text-anchor", "middle")
       .text("Points per Game");
   //Add X axis
-svg.append("g")
+d3.select("#svg1").append("g")
 .attr("transform","translate("+100+","+650+")").call(d3.axisBottom(x))
-svg.append("text")
+d3.select("#svg1").append("text")
       .attr("fill","black")
       .attr("font-family","sans-serif")
       .attr("font-size","30px")
@@ -188,18 +201,141 @@ svg.append("text")
       .attr("y",725)
       .style("text-anchor", "middle")
       .text("Goals Per Game");
+//////////////////////////////////
+//////////////////////////////////
+//////////////////////////////////
+//////////////////////////////////
+//////////////////////////////////
+var sel2 = d3.select("#svg2").selectAll("rect").data(data);
+d3.select("#svg2").append("g")
+     .attr("class", "grid")
+     .attr("transform", "translate(100," + height + ")")
+     .call(make_x_gridlines()
+         .tickSize(-height,0,0)
+         .tickFormat("")
+     )
 
-var active_link=0;
+ // add the Y gridlines
+ d3.select("#svg2").append("g")
+     .attr("class", "grid")
+     .call(make_y_gridlines()
+         .tickSize(-750,0,0)
+         .tickFormat("")
+     )
 
-  legend.on("click",function(){
-        if (active_link === "0") { //nothing selected, turn on this selection
-          d3.select(this)
-            .style("stroke", "black")
-            .style("stroke-width", 2);
-            active_link=1;
-          }
-        }
-      )
+// Adding rect
+sel2.enter().append("rect").merge(sel)
+.attr("x", function(d) { return x(d["Club"])+100; })
+.attr("y", function(d) { return  y(d["Curr"])+50; })
+.attr("height", function(d) { return height - y(d["Curr"])-100; })
+.attr("width", x.bandwidth())
+.attr("stroke-width",1)
+.attr("fill",function(d) { return color(cValue(d));})
+.on("mouseover", function(d) {
+        tooltip.transition()
+             .duration(200)
+             .style("opacity", .9);
+        tooltip.html(d["Club"] + "<br/> Pts: " + d["Curr"])
+             .style("left", (d3.event.pageX + 15) + "px")
+             .style("top", (d3.event.pageY - 28) + "px");
+    })
+    .on("mouseout", function(d) {
+        tooltip.transition()
+             .duration(500)
+             .style("opacity", 0);
+    });
+// Add legend
+sel2.exit().remove();
+// Add y axis
+d3.select("#svg2").append("g")
+.attr("transform","translate("+100+","+50+")").call(d3.axisLeft(y))
+.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left-50)
+    .attr("x",0 - (height / 2)+70)
+    .attr("dy", "1em")
+    .attr("fill","black")
+    .attr("font-family","sans-serif")
+    .attr("font-size","30px")
+    .attr("opacity",0.5)
+    .style("text-anchor", "middle")
+    .text("Points per Game");
+//Add X axis
+d3.select("#svg2").append("g")
+.attr("transform","translate("+100+","+650+")").call(d3.axisBottom(x))
+d3.select("#svg2").append("text")
+    .attr("fill","black")
+    .attr("font-family","sans-serif")
+    .attr("font-size","30px")
+    .attr("opacity",0.5)
+    .attr("x",420)
+    .attr("y",725)
+    .style("text-anchor", "middle")
+    .text("Goals Per Game");
+var legend = d3.select("#svg2").selectAll('.legend')
+          .data(data, function(d) { return d.Club; })
+          .enter().append('g')
+          .attr('class', 'legend')
+          .attr('ID', function(d) { return d.Club })
+          .attr("transform", function(d,i) {
+            return "translate(" + 1000 + "," + i*30 + ")";
+          });
+
+    legend.append("rect")
+          .attr('width', 20).attr('height', 20)
+          .style('fill', function(d) {
+            return color(d.Club);
+          });
+
+    legend.append("text")
+          .attr('x', 25).attr('y', 15)
+          .text(function(d) { return d.Club; })
+          .attr("font-family","sans-serif")
+          .attr("font-size","20px")
+          .attr("stroke","black");
+
+
+
+    d3.select("#svg2").append("text")
+    	.attr("x", 0)
+    	.attr("y", height + margin.top + 10)
+    	.attr("class", "legend")
+    	.style("fill", "steelblue")
+    	.on("click", function(){
+    		// Determine if current line is visible
+    		var active   = svg2.active ? false : true,
+    		  newOpacity = active ? "none" : "block";
+          nop2 = active ? "block" : "none";
+    		// Hide or show the elements
+    		d3.select("#svg2").style("display", newOpacity);
+        d3.select("#svg1").style("display", nop2);
+
+            		// Update whether or not the elements are active
+    		svg2.active = active;
+    	})
+    	.text("Double click for 2017");
+
+    // Add the red line title
+    d3.select("#svg1").append("text")
+    	.attr("x", 0)
+    	.attr("y", height + margin.top + 30)
+    	.attr("class", "legend")
+    	.style("fill", "red")
+    	.on("click", function(){
+    		// Determine if current line is visible
+    		var active   = svg1.active ? false : true ,
+    		  newOpacity = active ? "none" : "block";
+          nop2 = active ? "block" : "none";
+    		// Hide or show the elements
+    		d3.select("#svg1").style("display", newOpacity);
+        d3.select("#svg2").style("display", nop2);
+
+    		// Update whether or not the elements are active
+    		svg1.active = active;
+    	})
+    	.text("Double click for 2016");
+
+
 });
   </script>
 </body>
