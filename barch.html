@@ -55,15 +55,23 @@ stroke-width: 0;
   var width = 900;
   var height = 900;
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 1300 - margin.left - margin.right,
-    height = 750 - margin.top - margin.bottom;
-    var cValue = function(d) { return d.Club;},
-        color = d3.scaleOrdinal(d3.schemeCategory10);
-    var svg = d3.select("body").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  width = 1300 - margin.left - margin.right,
+  height = 750 - margin.top - margin.bottom;
+  var cValue = function(d) { return d.Club;},
+      color = d3.scaleOrdinal(d3.schemeCategory10);
+  var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var svg2 = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .attr("opacity","0");
+
 
 d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data2.csv",function(error,data){
 
