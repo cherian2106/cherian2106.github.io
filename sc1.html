@@ -43,7 +43,7 @@ stroke-width: 0;
 <html>
 <button onclick="location.href='writeup.html'">Prev Page</button>
 <button onclick="location.href='sc2.html'">Next Page</button>
-<h1>Goals per game vs Points per game</h1>
+<h1>Average goals scored per game vs Points per game</h1>
 <meta charset="utf-8">
 <body>
 
@@ -117,7 +117,7 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> Goals Per game: "
+          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> Average Goals Scored Per game: "
         +(d.GF/d.Pld).toFixed(2)+ "<br/> Points Per game: " +(d.Pts/d.Pld).toFixed(2))
                .style("left", (d3.event.pageX + 15) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
