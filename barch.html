@@ -256,7 +256,7 @@ d3.select("#svg2").append("g")
     .attr("font-size","30px")
     .attr("opacity",0.5)
     .style("text-anchor", "middle")
-    .text("Points per Game");
+    .text("Goals");
 //Add X axis
 d3.select("#svg2").append("g")
 .attr("transform","translate("+100+","+650+")").call(d3.axisBottom(x))
@@ -268,7 +268,7 @@ d3.select("#svg2").append("text")
     .attr("x",420)
     .attr("y",725)
     .style("text-anchor", "middle")
-    .text("Goals Per Game");
+    .text("Club");
 var legend = d3.select("#svg2").selectAll('.legend')
           .data(data, function(d) { return d.Club; })
           .enter().append('g')
