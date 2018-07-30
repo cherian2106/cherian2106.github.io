@@ -44,7 +44,7 @@ stroke-width: 0;
 </style>
 <html>
 <button onclick="location.href='choose.html'">Prev Page</button>
-<h1>Goals per game vs Points per game</h1>
+<h1>Goals Scored by Top 6 Teams</h1>
 <meta charset="utf-8">
 <body>
   <div id="successattack">
@@ -184,7 +184,7 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
       .attr("font-size","30px")
       .attr("opacity",0.5)
       .style("text-anchor", "middle")
-      .text("Points per Game");
+      .text("Goals Scored");
   //Add X axis
 d3.select("#svg1").append("g")
 .attr("transform","translate("+100+","+650+")").call(d3.axisBottom(x))
@@ -196,7 +196,7 @@ d3.select("#svg1").append("text")
       .attr("x",420)
       .attr("y",725)
       .style("text-anchor", "middle")
-      .text("Goals Per Game");
+      .text("Clubs");
 //////////////////////////////////
 //////////////////////////////////
 //////////////////////////////////
@@ -255,7 +255,7 @@ d3.select("#svg2").append("g")
     .attr("font-size","30px")
     .attr("opacity",0.5)
     .style("text-anchor", "middle")
-    .text("Points per Game");
+    .text("Goals Scored");
 //Add X axis
 d3.select("#svg2").append("g")
 .attr("transform","translate("+100+","+650+")").call(d3.axisBottom(x))
@@ -267,7 +267,7 @@ d3.select("#svg2").append("text")
     .attr("x",420)
     .attr("y",725)
     .style("text-anchor", "middle")
-    .text("Goals Per Game");
+    .text("Clubs");
 var legend = d3.select("#svg2").selectAll('.legend')
           .data(data, function(d) { return d.Club; })
           .enter().append('g')
@@ -293,10 +293,11 @@ var legend = d3.select("#svg2").selectAll('.legend')
 
 
     d3.select("#svg2").append("text")
-    	.attr("x", 0)
-    	.attr("y", height + margin.top + 10)
-    	.attr("class", "legend")
-    	.style("fill", "steelblue")
+    .attr("x", width-300)
+    .attr("y", height + margin.top)
+    .attr("class", "legend")
+    .attr("font-size",25)
+    .style("fill", "red")
     	.on("click", function(){
     		// Determine if GFent line is visible
     		var active   = svg2.active ? false : true,
@@ -309,14 +310,15 @@ var legend = d3.select("#svg2").selectAll('.legend')
             		// Update whether or not the elements are active
     		svg2.active = active;
     	})
-    	.text("Double click for 2017");
+    	.text("Double click for 2017-2018 data");
 
     // Add the red line title
     d3.select("#svg1").append("text")
-    	.attr("x", 0)
-    	.attr("y", height + margin.top + 30)
-    	.attr("class", "legend")
-    	.style("fill", "red")
+    .attr("x", width-300)
+    .attr("y", height + margin.top)
+    .attr("class", "legend")
+    .attr("font-size",25)
+    .style("fill", "red")
     	.on("click", function(){
     		// Determine if GFent line is visible
     		var active   = svg1.active ? false : true ,
@@ -329,7 +331,7 @@ var legend = d3.select("#svg2").selectAll('.legend')
     		// Update whether or not the elements are active
     		svg1.active = active;
     	})
-    	.text("Double click for 2016");
+    	.text("Double click for 2016-2017 data");
 
 
 });

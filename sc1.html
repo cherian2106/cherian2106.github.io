@@ -193,6 +193,13 @@ d3.selectAll("circle").attr("opacity", 1);
 d3.select(this).attr("stroke","none").attr("stroke-width",1);
 }
 })
+svg.append("text")
+  .attr("x", width-500)
+  .attr("y", height + margin.top-100)
+  .attr("class", "legend")
+  .attr("font-size",16)
+  .style("fill", "red")
+  .text("There is a 80.6% correlation");
 });
   </script>
 </body>

@@ -44,7 +44,7 @@ stroke-width: 0;
 <html>
 <button onclick="location.href='sc1.html'">Prev Page</button>
 <button onclick="location.href='sc3.html'">Next Page</button>
-<h1>Goals per game vs Points per game</h1>
+<h1>1/Goals conceded per game vs Points per game</h1>
 <meta charset="utf-8">
 <body>
 
@@ -186,7 +186,7 @@ svg.append("text")
       .attr("x",420)
       .attr("y",725)
       .style("text-anchor", "middle")
-      .text("Goals Per Game");
+      .text("1/Goals conceded Per Game");
 
       legend.on("click", function(data){
       c = !c;
@@ -205,6 +205,13 @@ svg.append("text")
       d3.selectAll("circle").attr("opacity", 1);
       }
       })
+      svg.append("text")
+        .attr("x", width-500)
+        .attr("y", height + margin.top-100)
+        .attr("class", "legend")
+        .attr("font-size",16)
+        .style("fill", "red")
+        .text("There is a 73.4% correlation");
 });
   </script>
 </body>
