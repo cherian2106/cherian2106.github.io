@@ -74,8 +74,8 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
   if (error) throw error;
     data.forEach(function (d)
      {
-      d["GF2"] = +d["GF2"];
-      d["GF1"] = +d["GF1"];
+      d["GA2"] = +d["GA2"];
+      d["GA1"] = +d["GA1"];
     });
 // Create tooltip
     var tooltip = d3.select("body").append("div")
@@ -133,8 +133,8 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
 // Adding rect
   sel.enter().append("rect").merge(sel)
   .attr("x", function(d) { return x(d["Club"])+100; })
-  .attr("y", function(d) { return  y(d["GF1"])+50; })
-  .attr("height", function(d) { return height - y(d["GF1"])-100; })
+  .attr("y", function(d) { return  y(d["GA1"])+50; })
+  .attr("height", function(d) { return height - y(d["GA1"])-100; })
   .attr("width", x.bandwidth())
   .attr("stroke-width",1)
   .attr("fill",function(d) { return color(cValue(d));})
@@ -142,7 +142,7 @@ var y = d3.scaleLinear().rangeRound([600, 0]);
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["Club"] + "<br/> Pts: " + d["GF1"])
+          tooltip.html(d["Club"] + "<br/> Pts: " + d["GA1"])
                .style("left", (d3.event.pageX + 15) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -226,8 +226,8 @@ d3.select("#svg2").append("g")
 // Adding rect
 sel2.enter().append("rect").merge(sel)
 .attr("x", function(d) { return x(d["Club"])+100; })
-.attr("y", function(d) { return  y(d["GF2"])+50; })
-.attr("height", function(d) { return height - y(d["GF2"])-100; })
+.attr("y", function(d) { return  y(d["GA2"])+50; })
+.attr("height", function(d) { return height - y(d["GA2"])-100; })
 .attr("width", x.bandwidth())
 .attr("stroke-width",1)
 .attr("fill",function(d) { return color(cValue(d));})
@@ -235,7 +235,7 @@ sel2.enter().append("rect").merge(sel)
         tooltip.transition()
              .duration(200)
              .style("opacity", .9);
-        tooltip.html(d["Club"] + "<br/> Pts: " + d["GF2"])
+        tooltip.html(d["Club"] + "<br/> Pts: " + d["GA2"])
              .style("left", (d3.event.pageX + 15) + "px")
              .style("top", (d3.event.pageY - 28) + "px");
     })
