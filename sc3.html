@@ -51,7 +51,7 @@ stroke-width: 0;
   <!-- <svg id = "legend" x = "1300" y = "0" width = "300" height = "900"> </svg> -->
   </div>
   <script>
-var active_link="0";
+var c = false;
   var width = 900;
   var height = 900;
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -191,21 +191,23 @@ svg.append("text")
       .style("text-anchor", "middle")
       .text("Goals Per Game");
 
-
-
-  legend.on("click",function(d){
-      //nothing selected, turn on this selection
-          d3.select(legend)
-            .attr("stroke", "black")
-            .attr("stroke-width", 2);
-            active_link="1";
-          });
-  legend.on("click",function(d){
-      if (active_link === "1") { //nothing selected, turn on this selection
-        d3.select(this)
-          .style("stroke", "none")
-          active_link="0";
-        }});
+      legend.on("click", function(data){
+      c = !c;
+      if(c == true){
+        d3.selectAll(".legend").attr("opacity", 0.1);
+      d3.select(this).attr("opacity",1);
+      d3.selectAll("circle").attr("opacity", function(d){
+        if(d["Club"]==data["Club"])
+        {return 1;}
+        else {
+          return 0.1;}
+      });
+      }
+      else{
+        d3.selectAll(".legend").attr("opacity", 1);
+      d3.selectAll("circle").attr("opacity", 1);
+      }
+      })
 });
   </script>
 </body>

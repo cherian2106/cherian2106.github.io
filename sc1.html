@@ -36,7 +36,6 @@ stroke: black;
 stroke-opacity: 0.1;
 shape-rendering: crispEdges;
 }
-
 .grid path {
 stroke-width: 0;
 }
@@ -51,28 +50,25 @@ stroke-width: 0;
   <!-- <svg id = "legend" x = "1300" y = "0" width = "300" height = "900"> </svg> -->
   </div>
   <script>
-var c = false;
+  var c = false;
+var active_link="0";
   var width = 900;
   var height = 900;
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 1300 - margin.left - margin.right,
     height = 750 - margin.top - margin.bottom;
     var cValue = function(d) { return d.Club;},
-        color = d3.scaleOrdinal(d3.schemeCategory10);
+        color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("body").append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+        .attr("height", height + margin.top + margin.bottom);
 d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/master/data.csv",function(error,data){
-
   if (error) throw error;
     data.forEach(function (d)
      {
       d.Pld = +d.Pld;
       d.Pts = +d.Pts;
-      d.GA =  +d.GA;
+      d.GF =  +d.GF
       d.First = +d.First;
     });
 // Create tooltip
@@ -80,16 +76,14 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
       .attr("class", "tooltip")
       .style("opacity", 0);
 // Scale X and Y values
-    var x = d3.scaleLinear().domain([0.4,1.2]).range([0,600]);
+    var x = d3.scaleLinear().domain([0.5,2.1]).range([0,600]);
     var y = d3.scaleLinear().domain([0.6,2.2]).range([600,0]);
 // Select data and append to circles
   var sel = svg.selectAll("circle").data(data);
-
   function make_x_gridlines() {
       return d3.axisBottom(x)
           .ticks(10)
   }
-
   // gridlines in y axis function
   function make_y_gridlines() {
       return d3.axisLeft(y)
@@ -102,7 +96,6 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
            .tickSize(-height,0,0)
            .tickFormat("")
        )
-
    // add the Y gridlines
    svg.append("g")
        .attr("class", "grid")
@@ -110,12 +103,9 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
            .tickSize(-750,0,0)
            .tickFormat("")
        )
-
-
-
 // Adding circles
   sel.enter().append("circle").merge(sel)
-  .attr("cx",function(d){return x(1/(d.GA/d.Pld))+100;})
+  .attr("cx",function(d){return x(d.GF/d.Pld)+100;})
   .attr("cy",function(d){return y(d.Pts/d.Pld)+50;})
   .attr("r",function(d){return d.First+3;})
   .attr("stroke","black")
@@ -125,8 +115,8 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> 1/Goals Against Per game: "
-        +(1/(d.GA/d.Pld)).toFixed(2)+ "<br/> Pts Per game: " +(d.Pts/d.Pld).toFixed(2))
+          tooltip.html(d["Club"] + "<br/> Trophies: " + d.First +"<br/> Goals Per game: "
+        +(d.GF/d.Pld).toFixed(2)+ "<br/> Points Per game: " +(d.Pts/d.Pld).toFixed(2))
                .style("left", (d3.event.pageX + 15) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -144,20 +134,17 @@ d3.csv("https://raw.githubusercontent.com/cherian2106/cherian2106.github.io/mast
             .attr("transform", function(d,i) {
               return "translate(" + 1000 + "," + i*14 + ")";
             });
-
       legend.append("rect")
             .attr('width', 12).attr('height', 12)
             .style('fill', function(d) {
               return color(d.Club);
             });
-
       legend.append("text")
             .attr('x', 25).attr('y', 10)
             .text(function(d) { return d.Club; })
             .attr("font-family","sans-serif")
-            .attr("font-size","13px")
+            .attr("font-size","15px")
             .attr("stroke","black");
-
   svg.exit().remove();
   // Add y axis
   svg.append("g")
@@ -186,23 +173,24 @@ svg.append("text")
       .style("text-anchor", "middle")
       .text("Goals Per Game");
 
-      legend.on("click", function(data){
-      c = !c;
-      if(c == true){
-        d3.selectAll(".legend").attr("opacity", 0.1);
-      d3.select(this).attr("opacity",1);
-      d3.selectAll("circle").attr("opacity", function(d){
-        if(d["Club"]==data["Club"])
-        {return 1;}
-        else {
-          return 0.1;}
-      });
-      }
-      else{
-        d3.selectAll(".legend").attr("opacity", 1);
-      d3.selectAll("circle").attr("opacity", 1);
-      }
-      })
+legend.on("click", function(data){
+c = !c;
+if(c == true){
+  d3.selectAll(".legend").attr("opacity", 0.1);
+d3.select(this).attr("opacity",1).attr("stroke","black").attr("stroke-width",2);
+d3.selectAll("circle").attr("opacity", function(d){
+  if(d["Club"]==data["Club"])
+  {return 1;}
+  else {
+    return 0.1;}
+});
+}
+else{
+  d3.selectAll(".legend").attr("opacity", 1);
+d3.selectAll("circle").attr("opacity", 1);
+d3.select(this).attr("stroke","none").attr("stroke-width",1);
+}
+})
 });
   </script>
 </body>

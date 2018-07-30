@@ -56,7 +56,7 @@ stroke-width: 0;
   <svg id = "svg2" x = "0" y = "0" width = "1300" height = "750" display = "none"> </svg>
   </div>
   <script>
-
+  var c = false;
   var width = 900;
   var height = 900;
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -313,28 +313,34 @@ var legend = d3.select("#svg2").selectAll('.legend')
             		// Update whether or not the elements are active
     		svg2.active = active;
     	})
-    	.text("Double click for 2017");
+    	.text("Double click for 2017-2018 data");
 
-    // Add the red line title
-    d3.select("#svg1").append("text")
-    	.attr("x", 0)
-    	.attr("y", height + margin.top + 30)
-    	.attr("class", "legend")
-    	.style("fill", "red")
-    	.on("click", function(){
-    		// Determine if GFent line is visible
-    		var active   = svg1.active ? false : true ,
-    		  newOpacity = active ? "none" : "block";
-          nop2 = active ? "block" : "none";
-    		// Hide or show the elements
-    		d3.select("#svg1").style("display", newOpacity);
-        d3.select("#svg2").style("display", nop2);
+    // Add the red line titl
+d3.select("#svg1").append("text")
+	.attr("x", 0)
+	.attr("y", height + margin.top + 30)
+	.attr("class", "legend")
+	.style("fill", "red")
+	.on("click", function(){
+		// Determine if GFent line is visible
+		var active   = svg1.active ? false : true ,
+		  newOpacity = active ? "none" : "block";
+      nop2 = active ? "block" : "none";
+		// Hide or show the elements
+		d3.select("#svg1").style("display", newOpacity);
+    d3.select("#svg2").style("display", nop2);
 
-    		// Update whether or not the elements are active
-    		svg1.active = active;
-    	})
-    	.text("Double click for 2016");
-
+		// Update whether or not the elements are active
+		svg1.active = active;
+	})
+	.text("Double click for 2016-2017 data");
+// legend.on("click",function(d){
+//   if(c==true)
+//   {
+//     legend.selectAll("rect").attr("opacity",0.1);
+//     d3.select(this).attr("opacity",0.9);
+//   }
+// })
 
 });
   </script>
