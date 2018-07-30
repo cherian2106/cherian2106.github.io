@@ -6,7 +6,7 @@ h1{
   padding-left: 1%;
   text-align: center;
   opacity: 0.8;
-  font-size: 40px;
+  font-size: 32px;
   text-decoration: underline;
 }
 h2{
@@ -18,18 +18,34 @@ h2{
   opacity: 0.7;
   font-size: 30px;
 }
+body {
+font: 14px sans-serif;
+background-color: rgba(211,211,211,0.5);
+}
+.cont{
+  padding-top : 2%;
+  padding-left: 5%;
+  padding-right: 5%;
+  font-size: 16px;
+}
 </style>
 <html>
+<button onclick="location.href='index.html'">Prev Page</button>
+<button onclick="location.href='sc1.html'">Next Page</button>
 <body>
   <div class = "header">
   <h1 > Q: What plays a bigger role in the success of a Soccer team, offense or defense?</h1>
   </div>
   <div class = "cont">
-<br>There are two popular sayings that are thrown around in football: "Offense is the best form of defense" and "Attack wins matches, defense win trophies". This made me wonder which of these actually play a bigger role in the success of a team.
-For this reason I have attempted to compare the attack and defense of the teams in the English premier league over the last 26 years. I have made an interactive slideshow which eventually leads to a page from where you have three options to view three different bar charts that compare different
+<br>There are two popular sayings that are thrown around in football: "Offense is the best form of defense" and "Attack wins matches, defense win trophies".
+This made me wonder which of these actually play a bigger role in the success of a team.
+For this reason I have attempted to compare the attack and defense of the teams in the English premier league over the last 26 years. I have made an interactive slideshow which
+eventually leads to a page from where you have three options to view three different bar charts that compare different
 stats of the current top 6 teams over the last 2 years. This allows people to compare the teams over a large number of years, as well as see what the result is in recent years. Thus
 the <u>NARRATIVE STRUCTURE</u> of my project can be thought of as a martini glass since it starts with a slideshow after which the user has multiple options
 as to where they want to go.</br>
+<br>In each slide you can move to the next or the previous slide using buttons on the page. These are the <u>TRIGGERS</u>
+in my project since it shifts the slide </br>
 <br>The slide show starts with 4 scatterplots. All of these scatter plots gives you the option to hover over the circles
 to give you the exact details of each data point. Each circle is colored a different color to represent the different teams.
 There is a legend which shows what color corresponds to what team. Further, you can click on any rectangle on the legend
@@ -43,6 +59,18 @@ an important point which helps them make a decision.
 The second scatterplot is similar to the first but compares the points per game to 1/Goals conceded per game. This is done
 to have a scatterplot with a positive slope to make it easier to compare the two plots.
 The third and fourth scatterplot compares the success of a team to the Goals scored and 1/goals condeded per game.
-Success is defined as (Titles won*4 + Second place*3 + Third Place*2 + Fourth*1).</br>
+Success is defined as (Titles won*4 + Second place*3 + Third Place*2 + Fourth*1). The Y axis has a Log scale so that the data is spread out evenly.</br>
 <br>After the scatterplots we reach a page where you have the option to view either Points gained by the top 6 teams in the last two years, Goals Scored
-by the top 6 teams in the last 2 years or the Goals conceded by the top 6 in the last 2 years.
+by the top 6 teams in the last 2 years or the Goals conceded by the top 6 in the last 2 years. This allows people to see what the trend is in recent years
+and see if it is different than from the last 26 years' data. The X - axis of the bar charts contain nominal data of the top 6 clubs and so the appropriate axis was chosen.
+The bar charts have text at the bottom which a user can double click to show the data for the other year, ie, either data for 2017-2018 or data for 2016-2017.
+This is the <u>PARAMETER</u> part of my project since pressing it changes the data that is displayed for the user to see.</br>
+<br>To summarize the rubric, The hybrid <u>NARRATIVE STRUCTURE</u> that my visualisation follows is
+that of a martini glass since it starts with a slide show followed by the ability to move to multiple scenes
+from a single page. There are multiple <u>SCENES</u> in my visualisation which starts with 4 scatter plots followed by
+three bar charts. There are buttons to move from one scene to another which act as the <u>TRIGGERS</u> for the visualisation.
+The buttons look 3D so that the user can know that he can click them to move to that slide number.
+The scatterplots allow you to highlight data points by clicking on the legend as well display information on hovering over the
+points. These act as <u>ANNOTATIONS</u> since they highlight information and draws the users attention to information
+that helps them make decisions. The bar charts contain text at the bottom of the page which can be <b>double-clicked</b> to view data from a different year. This acts as
+the <u>PARAMETERS</u> for my visualisation since it changes the data displayed for the user to view and make a decision.</br>
